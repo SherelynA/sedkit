@@ -564,7 +564,7 @@ class Spectrum:
         self._flux_units = flux_units
         self._set_units()
 
-    def integrate(self, units=None, n_samples=1000):
+    def integrate(self, units=None, n_samples=10000):
         """Calculate the area under the spectrum
 
         Parameters

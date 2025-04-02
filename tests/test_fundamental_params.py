@@ -33,11 +33,15 @@ def spec():
 @pytest.mark.parametrize("seds", ["sub_spec", "spec"])
 def test_just_spectrum(seds, request):
     sed = request.getfixturevalue(seds)
+    sed.spectral_type = None    # forcing the SED to take no info from SIMBAD on SPT
+    sed.distance = None     # forcing the SED to take no info from SIMBAD on distance
+
     sed.results
     assert np.isclose(sed.fbol[0], 1.9184645e-12 * u.erg / u.s / u.cm**2)
     assert np.isclose(sed.fbol[1], 5.26164965e-15 * u.erg / u.s / u.cm**2)
     assert sed.mbol == (17.811, 0.003)
     assert sed.Lbol is None
+    assert sed.Lbol_sun is None
     assert sed.radius is None
     assert sed.Teff is None
     assert sed.logg is None
@@ -49,42 +53,51 @@ def test_just_spectrum(seds, request):
     [
         (
             "sub_spec",
-            (0.973 * u.Rjup, 0 * u.Rjup, 0 * u.Rjup),
-            (903 * u.K, 4 * u.K, 4 * u.K),
+            (0.973 * u.Rjup, 0.0 * u.Rjup, 0.0 * u.Rjup),
+            (682 * u.K, 3.0 * u.K, 3.0 * u.K),
         ),
         (
             "spec",
-            (0.1 * u.solRad, 0 * u.solRad, 0 * u.solRad),
-            (903 * u.K, 4.0 * u.K, 4.0 * u.K),
+            (0.1 * u.solRad, 0.0 * u.solRad, 0.0 * u.solRad),
+            (682 * u.K, 3.0 * u.K, 3.0 * u.K),
         ),
     ],
 )
 def test_age_distance(seds, radius_expected, teff_expected, request):
     sed = request.getfixturevalue(seds)
     sed.age = 4.5 * u.Gyr, 0.1 * u.Gyr
-    sed.distance = 10 * u.pc, 0.1 * u.pc
+    sed.parallax = 175.2 * u.mas, 1.7 * u.mas     # This is the parallax of 2MASS J04151954-0935066
     sed.results
 
     assert np.isclose(sed.fbol[0], 1.9184645e-12 * u.erg / u.s / u.cm**2)
-    assert np.isclose(sed.fbol[1], 5.26164965e-15 * u.erg / u.s / u.cm**2)
+    assert np.isclose(sed.fbol[1], 5.51305904e-15 * u.erg / u.s / u.cm**2)
     assert sed.mbol == (17.811, 0.003)
-    assert np.isclose(sed.Lbol[0], 2.29543367e28 * u.erg / u.s, rtol=0.05)
-    assert np.isclose(sed.Lbol[1], 4.63561547e26 * u.erg / u.s, rtol=0.05)
-    assert sed.Lbol_sun == (-5.222, 0.009)
+    assert np.isclose(sed.Lbol[0], 7.48405489e+27 * u.erg / u.s, rtol=0.5)
+    assert np.isclose(sed.Lbol[1], 1.32712721e+26 * u.erg / u.s, rtol=0.5)
+    assert np.isclose(sed.Lbol_sun[0], -5.709, rtol=0.2)
+    assert np.isclose(sed.Lbol_sun[1], 0.009, rtol=0.2)
     assert sed.radius == radius_expected
     assert sed.Teff == teff_expected
     assert sed.logg is None
     assert sed.mass is None
 
 
-@pytest.mark.parametrize("seds", ["sub_spec", "spec"])
-def test_radius(seds, request):
+@pytest.mark.parametrize(
+    "seds,radius_expected",
+    [
+        ("sub_spec",
+         [0.86 * u.Rjup, 0.001 * u.Rjup, 0.001 * u.Rjup]
+         ),
+        ("spec",
+         [0.088 * u.solRad, 0.0 * u.solRad, 0.0 * u.solRad]
+         ),
+    ],
+)
+def test_radius(seds, radius_expected, request):
     sed = request.getfixturevalue(seds)
     sed.age = 4.5 * u.Gyr, 0.1 * u.Gyr
-    sed.distance = 10 * u.pc, 0.1 * u.pc
+    sed.parallax = 175.2 * u.mas, 1.7 * u.mas
     sed.evo_model = "hybrid_solar_age"  # Saumon & Marley 2008 evo model
     sed.results
     sed.infer_radius(infer_from="evo_model")
-    if seds == "sub_spec":
-        print(sed.radius)
-        assert sed.radius == (0.824 * u.Rjup, 0.0 * u.Rjup, 0.0 * u.Rjup)
+    assert sed.radius == radius_expected

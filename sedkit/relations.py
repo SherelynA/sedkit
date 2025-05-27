@@ -479,7 +479,7 @@ class SpectralTypeRadius:
             fig.triangle([spt], [radius.value], color='red', size=15, legend_label=u.specType(spt))
             show(fig)
 
-        return radius.round(3), radius_unc.round(3)
+        return radius, radius_unc
 
     def generate(self, orders):
         """

@@ -93,7 +93,7 @@ def test_age_distance(seds, radius_expected, teff_expected, request):
          ),
     ],
 )
-def test_radius(seds, radius_expected, request):
+def test_radius_using_evo_model(seds, radius_expected, request):
     sed = request.getfixturevalue(seds)
     sed.age = 4.5 * u.Gyr, 0.1 * u.Gyr
     sed.parallax = 175.2 * u.mas, 1.7 * u.mas

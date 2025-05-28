@@ -53,7 +53,7 @@ def test_just_spectrum(seds, request):
     [
         (
             "sub_spec",
-            (0.973 * u.Rjup, 0.0 * u.Rjup, 0.0 * u.Rjup),
+            (0.973 * u.Rjup, 0.001 * u.Rjup, 0.001 * u.Rjup),
             (682 * u.K, 3.0 * u.K, 3.0 * u.K),
         ),
         (

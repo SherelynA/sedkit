@@ -286,7 +286,7 @@ class Relation:
                 self.relations[rel_name] = full_rel
 
                 if y_upper is not None:
-                    return y_val.round(3), y_upper.round(3), y_lower.round(3), self.ref
+                    return y_val, y_upper, y_lower, self.ref
                 else:
                     return y_val, self.ref
 
@@ -479,6 +479,7 @@ class SpectralTypeRadius:
             fig.triangle([spt], [radius.value], color='red', size=15, legend_label=u.specType(spt))
             show(fig)
 
+        print(radius, radius_unc)
         return radius, radius_unc
 
     def generate(self, orders):

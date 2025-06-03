@@ -1843,7 +1843,7 @@ class SED:
             if self.Lbol_sun[1] is None:
                 self.message('Lbol={0.Lbol}. Uncertainties are needed to calculate the surface gravity.'.format(self))
             else:
-                logg = self.evo_model.evaluate(self.Lbol_sun, self.age, 'Lbol', 'logg', plot=plot)
+                logg = self.evo_model.evaluate(self.Lbol_sun, self.age, 'Lbol', 'logg', self.age_distribution, plot=plot)
 
             # Print a message if None
             if logg is None:
@@ -1882,7 +1882,7 @@ class SED:
                 self.message('Lbol={0.Lbol}. Uncertainties are needed to calculate the mass.'.format(self))
             else:
                 self.evo_model.mass_units = mass_units
-                mass = self.evo_model.evaluate(self.Lbol_sun, self.age, 'Lbol', 'mass', plot=plot)
+                mass = self.evo_model.evaluate(self.Lbol_sun, self.age, 'Lbol', 'mass',self.age_distribution, plot=plot)
 
             # Store the value
             self.mass = [mass[0].round(0),  mass[1].round(0), mass[2].round(0), mass[3]] if mass is not None else mass
@@ -1966,7 +1966,7 @@ class SED:
                 self.message('Lbol={0.Lbol}. Uncertainties are needed to calculate the radius.'.format(self))
             else:
                 self.evo_model.radius_units = radius_units
-                radius = self.evo_model.evaluate(self.Lbol_sun, self.age, 'Lbol', 'radius', plot=plot)
+                radius = self.evo_model.evaluate(self.Lbol_sun, self.age, 'Lbol', 'radius', self.age_distribution, plot=plot)
 
             # Store the value
             self.radius = [radius[0].round(3), radius[1].round(3), radius[2].round(3), radius[3]] if radius is not None else radius
@@ -2069,7 +2069,7 @@ class SED:
                 self.message('Lbol={0.Lbol}. Uncertainties are needed to calculate the teff.'.format(self))
             else:
                 self.evo_model.teff_units = teff_units
-                teff = self.evo_model.evaluate(self.Lbol_sun, self.age, 'Lbol', 'teff', plot=plot)
+                teff = self.evo_model.evaluate(self.Lbol_sun, self.age, 'Lbol', 'teff',self.age_distribution, plot=plot)
 
             # Store the value
             self.Teff = [teff[0].round(0), teff[1].round(0), teff[2].round(0), teff[3]] if teff is not None else teff

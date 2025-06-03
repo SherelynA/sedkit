@@ -166,6 +166,7 @@ class SED:
         self.multiple = False
         self.HRsequence = rel.DwarfSequence()
         self.substellar = substellar
+        self.age_distribution = None
 
         # Dictionary to keep track of references
         self._refs = {}
@@ -1073,6 +1074,25 @@ class SED:
 
         # Set as uncalculated
         self.calculated = False
+
+    def age_distribution(self, age_distribution):
+        """
+        A setter for the age distribution
+
+        Parameters
+        ----------
+        age_distribution: str
+            The chosen age distribution
+        """
+        if age_distribution is None:
+            self.age_distribution = 'uniform'
+            self.message("Using a uniform distribution for age")
+        else:
+            if age_distribution == 'normal':
+                self.age_distribution = 'normal'
+                self.message("Using a normal distribution for ages")
+            else:
+                raise ValueError("Please use either 'uniform' or 'normal' for age_distribution parameter")
 
     def export(self, parentdir='.', dirname=None, zipped=False):
         """

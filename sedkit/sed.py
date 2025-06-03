@@ -1084,7 +1084,7 @@ class SED:
         age_distribution: str
             The chosen age distribution
         """
-        if age_distribution is None:
+        if self.age_distribution is None:
             self.age_distribution = 'uniform'
             self.message("Using a uniform distribution for age")
         else:

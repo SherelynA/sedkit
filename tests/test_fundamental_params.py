@@ -65,7 +65,7 @@ def test_just_spectrum(seds, request):
 )
 def test_age_distance(seds, radius_expected, teff_expected, request):
     sed = request.getfixturevalue(seds)
-    sed.age = 4.5 * u.Gyr, 0.1 * u.Gyr
+    sed.age = 4.5 * u.Gyr, 4 * u.Gyr
     sed.parallax = 175.2 * u.mas, 1.7 * u.mas     # This is the parallax of 2MASS J04151954-0935066
     sed.results
 
@@ -86,6 +86,28 @@ def test_age_distance(seds, radius_expected, teff_expected, request):
     "seds,radius_expected",
     [
         ("sub_spec",
+         [0.855 * u.Rjup, 0.023 * u.Rjup, 0.112 * u.Rjup]
+         ),
+        ("spec",
+         [0.088 * u.solRad, 0.002 * u.solRad, 0.012 * u.solRad]
+         ),
+    ],
+)
+def test_radius_using_evo_model(seds, radius_expected, request):
+    sed = request.getfixturevalue(seds)
+    sed.age = 4.5 * u.Gyr, 4 * u.Gyr
+    sed.parallax = 175.2 * u.mas, 1.7 * u.mas
+    sed.evo_model = "hybrid_solar_age"  # Saumon & Marley 2008 evo model
+    sed.results
+    sed.infer_radius(infer_from="evo_model")
+    assert np.isclose(sed.radius[0], radius_expected[0],rtol=0.2)
+    assert np.isclose(sed.radius[1], radius_expected[1], rtol=0.2)
+    assert np.isclose(sed.radius[2], radius_expected[2], rtol=0.2)
+
+@pytest.mark.parametrize(
+    "seds,radius_expected",
+    [
+        ("sub_spec",
          [0.86 * u.Rjup, 0.001 * u.Rjup, 0.001 * u.Rjup]
          ),
         ("spec",
@@ -93,11 +115,12 @@ def test_age_distance(seds, radius_expected, teff_expected, request):
          ),
     ],
 )
-def test_radius_using_evo_model(seds, radius_expected, request):
+def test_age_distribution(seds,radius_expected,request):
     sed = request.getfixturevalue(seds)
     sed.age = 4.5 * u.Gyr, 0.1 * u.Gyr
     sed.parallax = 175.2 * u.mas, 1.7 * u.mas
     sed.evo_model = "hybrid_solar_age"  # Saumon & Marley 2008 evo model
+    sed.age_distribution = 'normal'
     sed.results
     sed.infer_radius(infer_from="evo_model")
     assert sed.radius == radius_expected

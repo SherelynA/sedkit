@@ -262,8 +262,6 @@ class Relation:
                     y_val = y.nominal * out_yunits
                     y_upper = y.upper * out_yunits
                     y_lower = y.lower * out_yunits
-                    print("This is the yunit conversion", out_yunits)
-                    print(y_val)
 
                 else:
 

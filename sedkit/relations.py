@@ -236,8 +236,9 @@ class Relation:
 
                 # Get the relation
                 full_rel = self.relations[rel_name]
-                out_xunits = float('{:.{p}}'.format(full_rel['xunit'].to(xunits), p=3)) * xunits if xunits is not None else full_rel['xunit'] or 1
-                out_yunits = float('{:.{p}}'.format(full_rel['yunit'].to(yunits), p=3)) * yunits if yunits is not None else full_rel['yunit'] or 1
+
+                out_xunits = '{:.{p}}'.format(full_rel['xunit'].to(xunits), p=3) * xunits if xunits is not None else full_rel['xunit'] or 1
+                out_yunits = '{:.{p}}'.format(full_rel['yunit'].to(yunits), p=3) * yunits if yunits is not None else full_rel['yunit'] or 1
                 # Use local points for relation
                 if isinstance(fit_local, int) and fit_local is not False:
 
@@ -261,6 +262,8 @@ class Relation:
                     y_val = y.nominal * out_yunits
                     y_upper = y.upper * out_yunits
                     y_lower = y.lower * out_yunits
+                    print("This is the yunit conversion", out_yunits)
+                    print(y_val)
 
                 else:
 

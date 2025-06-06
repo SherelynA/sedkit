@@ -136,7 +136,7 @@ class Isochrone:
         yparam: str
             The name of the parameter on the y-axis
         distribution: str
-            The type of distribution to use for the interpolation.
+            The type of distribution used for the Monte Carlo approach, either 'uniform' or 'normal'
         plot: bool
             Plot all isochrones and the interpolated value
 
@@ -172,11 +172,12 @@ class Isochrone:
 
         # Generate random sample for values on the x-axis
         xsample = np.random.normal(mu, sigma, 10000)
+
         # Generate random sample for the age range provided
         if distribution == 'uniform':
             ysample = np.random.uniform(mu_a-sigma_a, mu_a+sigma_a, 10000)
         elif distribution == 'normal':
-            ysample = np.random.normal(mu_a,sigma_a, 10000)
+            ysample = np.random.normal(mu_a, sigma_a, 10000)
         else:
             raise ValueError("Distribution must be set to 'uniform' or 'normal'.")
 

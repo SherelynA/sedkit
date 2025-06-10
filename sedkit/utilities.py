@@ -1029,7 +1029,7 @@ def specType(SpT, types=[i for i in 'OBAFGKMLTY'], verbose=False):
             #     SpT = SpT.split('+')[0]
 
             # Get the MK spectral class
-            MK = types[np.where([i in SpT for i in types])[0][0]]
+            MK = types[np.where([i in SpT for i in types])[0][-1]]
 
             if MK:
 

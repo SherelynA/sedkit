@@ -304,3 +304,27 @@ def test_str2Q():
     """Test str2Q function"""
     qnt = u.str2Q('um', target='A')
     qnt = u.str2Q(None)
+
+
+@pytest.mark.parametrize(
+    "spectral_type_input, spectral_type_expected",
+    [
+        ("L7 VL-G",  [77.0, 0.5, '', '', 'V']),
+        ("L7",  [77.0, 0.5, '', '', 'V']),
+        ("T7.5",  [87.5, 0.5, '', '', 'V']),
+        ("Y0", [90.0, 0.5, '', '', 'V']),
+        ("L2 (blue) FLD-G", [72.0, 0.5, '', 'b', 'V']),
+        ("d/sdM9:", [69.0, 0.5, 'd/sd', '', 'V']),
+        ("L5 beta",  [75.0, 0.5, '', 'b', 'V']),
+        ("L8::", [78.0, 0.5, '', '', 'V']),
+        (88, "T8"),
+    ],
+)
+def test_spectype(spectral_type_input,spectral_type_expected):
+    """Test spectype function"""
+    # Test data
+
+    spec_type = u.specType(spectral_type_input)
+
+    # Check type
+    assert spec_type == spectral_type_expected, f"Expected {spectral_type_expected}, got {spec_type}"
